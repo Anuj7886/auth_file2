@@ -1,0 +1,43 @@
+[Done] exited with code=1 in 0.247 seconds
+
+[Running] node "d:\node.js\auth_file\users.js"
+
+[Done] exited with code=0 in 1.034 seconds
+
+[Running] node "d:\node.js\auth_file\router.js"
+
+[Done] exited with code=0 in 1.479 seconds
+
+[Running] node "d:\node.js\auth_file\tempCodeRunnerFile.js"
+
+[Done] exited with code=0 in 0.331 seconds
+
+[Running] node "d:\node.js\auth_file\protected.js"
+
+[Done] exited with code=0 in 0.393 seconds
+
+[Running] node "d:\node.js\auth_file\apprun.js"
+node:internal/modules/esm/resolve:265
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'd:\node.js\auth_file\routes\auth' imported from d:\node.js\auth_file\apprun.js
+    at finalizeResolution (node:internal/modules/esm/resolve:265:11)
+    at moduleResolve (node:internal/modules/esm/resolve:933:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1169:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:540:12)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:509:25)
+    at ModuleLoader.getModuleJob (node:internal/modules/esm/loader:239:38)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:96:40)
+    at link (node:internal/modules/esm/module_job:95:36) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///d:/node.js/auth_file/routes/auth'
+}
+
+Node.js v20.17.0
+
+[Done] exited with code=1 in 0.189 seconds
+
+[Running] node "d:\node.js\auth_file\auth.js"
+
+[Done] exited with code=0 in 0.468 seconds
