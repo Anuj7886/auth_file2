@@ -1,78 +1,61 @@
-/*import express from 'express';
-import mssql from 'mssql';
-
-const app = express();
-
-const dbConfig = {
-  user: 'sports', // Replace with your SQL Server username
-    password: 'sports@123', // Replace with your SQL Server password
-    server: '192.168.1.18', // Use 'localhost' if running on the same machine
-    database: 'SPORTS', // Replace with your database name, e.g., 'testdb'
-    port: 1433,
-  options: {
-    encrypt: true
-  }
-};
-
-async function createConnection() {
-  try {
-    const pool = new mssql.ConnectionPool(dbConfig);
-    await pool.connect();
-    console.log('Connected to database');
-  } catch (err) {
-    console.error('Error connecting to database:', err);
-  }
-}
-
-createConnection();
-
-app.use(express.json());
-
-const authRoutes = require('./routes/auth');
-const protectedRoute = require('./routes/protectedRoute');
-
-app.use('/auth', authRoutes);
-app.use('/protected', protectedRoute);
-
-const PORT = process.env.PORT || 1433;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});*/
 
 import express from 'express';
-import mssql from 'mssql';
-import authRoutes from './auth.js';
-import protectedRoute from './protected.js';
+import { Sequelize, DataTypes } from 'sequelize';
+import bcrypt from 'bcrypt';
 
-const dbConfig = {
-  user: 'sports',
-  password: 'sports@123',
-  server: '192.168.1.15',
-  database: 'SPORTS',
-  options: {
-    encrypt: true
-  }
-};
+import jwt from 'jsonwebtoken';
 
-const app = express();
-
-async function createConnection() {
-  try {
-    const pool = new mssql.ConnectionPool(dbConfig);
-    await pool.connect();
-    console.log('Connected to database');
-  } catch (err) {
-    console.error('Error connecting to database:', err);
-  }
-}
-
-createConnection();
-
-app.use(express.json());
-app.use('/auth', authRoutes);
-app.use('/protected', protectedRoute);
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const sequelize = new Sequelize('SPORTS', 'anujUID', 'anujPWD', {
+  host: '192.168.1.15',
+  dialect: 'mssql',
 });
+
+
+const User = sequelize.define('User ', {
+  username: {
+    type: DataTypes.STRING,
+    unique: true,
+    required: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    required: true,
+  },
+});
+
+
+const router = express.Router();
+
+router.post('/register', async (req, res) => {
+  try {
+    const { aman , aman1234 } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ aman1234, password: hashedPassword });
+    res.status(201).json({ message: 'User  registered successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Registration failed' });
+  }
+});
+
+
+router.post('/login', async (req, res) => {
+  try {
+    const { aman, aman1234} = req.body;
+    const user = await User.findOne({ where: { anujUID } });
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+    const passwordMatch = await bcrypt.compare(password, aman1234);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+    const token = jwt.sign({ userId: user.id }, '123456', {
+      expiresIn: '1h',
+    });
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+export default router;
